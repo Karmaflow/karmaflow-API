@@ -1,7 +1,7 @@
 'use strict'
 var mongoose = require('mongoose');
 
-var questionSchema = mongoose.model('Question',{
+var questionSchema = mongoose.Schema({
           title: String,
           post:String,
           tag:String,
