@@ -1,5 +1,8 @@
 'use strict'
-var mongoose = require('mongoose');
+var mongoose = require('mongoose')
+  , Schema   = mongoose.Schema
+  , Answer =  require('./answer')
+  , User =  require('./user')
 
 var questionSchema = mongoose.Schema({
           title: String,
@@ -9,6 +12,8 @@ var questionSchema = mongoose.Schema({
             type: Date,
             default: Date.now
            },
+           answers :[Answer.schema],
+           postedBy:[User.schema]
         });
 
 module.exports = mongoose.model('Question',questionSchema);

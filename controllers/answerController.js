@@ -1,18 +1,16 @@
 var db =  require('../utils/db'),
-    Question = require ('../models/question'),
+    Answer = require ('../models/answer'),
     numeral = require('numeral');
-
-
-
     db.once('open', function () {
       console.log('MongoDB y mongoose listo');
     });
-var questionController = {}
 
-var getQuestionsbyTag= function(req,res){
-      var tag = req.params.tag;
+var answerController = {}
+
+var getAnswersbyQuestion= function(req,res){
+      var id = req.params.idQuestion;
         console.log(tag);
-        Question.find({'tag':tag},function(err,questions){
+        Answer.find({'id':id},function(err,questions){
             if(err){
                return res.status('500').json({'error':err})
             }
@@ -22,14 +20,13 @@ var getQuestionsbyTag= function(req,res){
             }
       });
 },
-createQuestion= function(req,res){
-  console.log('Saving....');
-  var q = new Question ({
+createAnswer= function(req,res){
+
+  var q = new Answer ({
       title: req.body.title,
       post:req.body.post,
       tag:req.body.tag
   });
-  console.log(q);
   q.save(function(err,question){
     if(err){
       return res.status('500').json({'error':err})
@@ -41,6 +38,6 @@ createQuestion= function(req,res){
   });
 };
 
-questionController.getQuestionsbyTag = getQuestionsbyTag;
-questionController.createQuestion = createQuestion;
-module.exports = questionController;
+answerController.getAnswersbyQuestion = getAnswersbyQuestion;
+answerController.createAnswer = createAnswer;
+module.exports = answerController;
