@@ -1,12 +1,6 @@
 var db =  require('../utils/db'),
     Question = require ('../models/question'),
     numeral = require('numeral');
-
-
-
-    db.once('open', function () {
-      console.log('MongoDB y mongoose listo');
-    });
 var questionController = {}
 
 var getQuestionsbyTag= function(req,res){
@@ -36,7 +30,8 @@ var getQuestionsbyTag= function(req,res){
       });
 },
 createQuestion= function(req,res){
-  console.log('Saving....');
+  console.log(req.headers);
+  console.log(req.body);
   var q = new Question ({
       title: req.body.title,
       post:req.body.post,
