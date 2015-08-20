@@ -1,31 +1,16 @@
 var db =  require('../utils/db'),
     Answer = require ('../models/answer'),
     numeral = require('numeral');
-    db.once('open', function () {
-      console.log('MongoDB y mongoose listo');
-    });
+    mongoose = require('mongoose');
 
 var answerController = {}
 
-var getAnswersbyQuestion= function(req,res){
-      var id = req.params.idQuestion;
-        console.log(tag);
-        Answer.find({'id':id},function(err,questions){
-            if(err){
-               return res.status('500').json({'error':err})
-            }
-            if(questions){
-              console.log(questions);
-              return res.status('200').json({'questions':questions});
-            }
-      });
-},
-createAnswer= function(req,res){
-
+var createAnswer= function(req,res){
+  var _id = req.body.id;
   var q = new Answer ({
-      title: req.body.title,
       post:req.body.post,
-      tag:req.body.tag
+      question:_id,
+      karma:0
   });
   q.save(function(err,question){
     if(err){
@@ -36,8 +21,37 @@ createAnswer= function(req,res){
       return res.status('200').json({'question':question});
     }
   });
+},
+getAnswersByQuestion = function (req,res){
+    var _id = req.query.id;
+    console.log(_id);
+    Answer.find({ "question" :_id},function(err,answers){
+        if(err){
+           return res.status('500').json({'error':err})
+        }
+        if(answers){
+          console.log(answers);
+          return res.status('200').json({'answers':answers});
+        }
+    });
+
+},
+giveKarma = function(req,res){
+    var _idQ = req.body.idQuestion;
+    var _idA = req.body.idAnswer;
+    console.log(_idA);
+    console.log(_idQ);
+    Answer.update({$and:[{question:_idQ},{_id:_idA}]}
+        ,{$inc:{ karma: +1}},function(err,raw){
+            if(err)
+                return res.status('500').json({'error':err})
+             return res.status('200').json({'answers':raw});
+
+    });
+
 };
 
-answerController.getAnswersbyQuestion = getAnswersbyQuestion;
 answerController.createAnswer = createAnswer;
+answerController.getAnswersByQuestion = getAnswersByQuestion;
+answerController.giveKarma = giveKarma;
 module.exports = answerController;

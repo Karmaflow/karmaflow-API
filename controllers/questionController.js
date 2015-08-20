@@ -6,7 +6,7 @@ var questionController = {}
 
 var getQuestionsbyTag= function(req,res){
 
-      var tag =  req.params.tag;
+      var tag =  req.query.tag;
         console.log(tag);
         Question.find({'tag':tag},function(err,questions){
             if(err){
